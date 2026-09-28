@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MapItem : MonoBehaviour, IInteractable
@@ -12,4 +13,13 @@ public class MapItem : MonoBehaviour, IInteractable
         return "Interact with map";
     }
 
+    public IReadOnlyList<Interaction> GetInteractions()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void Interact(InteractionType primary)
+    {
+        throw new System.NotImplementedException();
+    }
 }

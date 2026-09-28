@@ -1,39 +1,50 @@
+using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerInteractor : MonoBehaviour
 {
-    public Camera mainCamera;
-    public float interactionDistance = 3f;
-    public GameObject interactionUI;
-    public TextMeshProUGUI interactionText;
+    [SerializeField] public Camera mainCamera;
+    [SerializeField] public float interactionDistance = 3f;
+    [SerializeField] public GameObject interactionUI;
+    [SerializeField] public TextMeshProUGUI interactionText;
 
     private bool hitSomething;
-    private IInteractable interactable;
 
-    [SerializeField] private InputActionReference interactAction;
+    [SerializeField] private InputActionReference primaryInput;
+    [SerializeField] private InputActionReference secondaryInput;
 
-    void OnEnable()
+    public IInteractable CurrentTarget { get; private set; }
+
+    private void OnEnable()
     {
-        interactAction.action.performed += InteracteInput;
-        interactAction.action.canceled += InteracteInput;
+        primaryInput.action.performed += OnPrimary;
+        primaryInput.action.canceled += OnPrimary;
+        secondaryInput.action.performed += OnSecondary;
+        secondaryInput.action.canceled += OnSecondary;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
-        interactAction.action.performed -= InteracteInput;
-        interactAction.action.canceled -= InteracteInput;
+        primaryInput.action.performed -= OnPrimary;
+        primaryInput.action.canceled -= OnPrimary;
+        secondaryInput.action.performed -= OnSecondary;
+        secondaryInput.action.canceled -= OnSecondary;
     }
 
-    private void InteracteInput(InputAction.CallbackContext context)
+    private void OnPrimary(InputAction.CallbackContext context)
     {
-        if (hitSomething && interactable != null)
-        {
-            interactable.Interact();
-        }
+        Debug.Log("Interact Primary");
+        CurrentTarget?.Interact(InteractionType.Primary);
     }
 
+    private void OnSecondary(InputAction.CallbackContext context)
+    {
+        Debug.Log("Interact Secondary");
+        CurrentTarget?.Interact(InteractionType.Secondary);
+    }
 
     void Update()
     {
@@ -42,19 +53,34 @@ public class PlayerInteractor : MonoBehaviour
 
     void HandleInteraction()
     {
+        CurrentTarget = null;
+
         Ray ray = mainCamera.ViewportPointToRay(Vector3.one/2f);
         RaycastHit hit;
 
-        hitSomething = false;
+        // hitSomething = false;
 
         if (Physics.Raycast(ray, out hit, interactionDistance))
         {
-            if (hit.collider.gameObject.TryGetComponent(out interactable))
+            CurrentTarget = hit.collider.GetComponent<IInteractable>();
+            if (CurrentTarget != null)
             {
-                hitSomething = true;
-                interactionText.text = interactable.GetDescription();
+                // hitSomething = true;
+                
+                IInteractable interactable = CurrentTarget;
+
+                if (interactable != null)
+                {
+                    IReadOnlyList<Interaction> interactions =
+                        interactable.GetInteractions();
+
+                    foreach (Interaction interaction in interactions)
+                    {
+                        Debug.Log(interaction.Description);
+                    }
+                }
             }
         }
-        interactionUI.SetActive(hitSomething);    
+        interactionUI.SetActive(CurrentTarget != null);    
     }
 }

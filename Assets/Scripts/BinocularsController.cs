@@ -2,18 +2,14 @@ using UnityEngine;
 
 public class BinocularsController : MonoBehaviour
 {
-    [SerializeField]
-    GameObject BinocularMenu;
     [SerializeField] 
     private float zoomSpeed = 5f;
 
     private Camera m_mainCamera;
-
     private bool _binoculatMode = false;
 
     private float targetFOV;
     private float normalFOV = 60f;
-
 
     public delegate void OnViewFieldChoosed(int value);
     public static event OnViewFieldChoosed onViewFieldChoosed;
@@ -24,15 +20,20 @@ public class BinocularsController : MonoBehaviour
         targetFOV = m_mainCamera.fieldOfView;
     }
 
+    void OnEnable()
+    {
+        _binoculatMode = !_binoculatMode;
+        targetFOV = _binoculatMode ? 30f : normalFOV;
+    }
+
+    void OnDisable()
+    {
+        _binoculatMode = !_binoculatMode;
+        targetFOV = _binoculatMode ? 30f : normalFOV;
+    }
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            _binoculatMode = !_binoculatMode;
-            targetFOV = _binoculatMode ? 30f : normalFOV;
-            BinocularMenu.SetActive(_binoculatMode);
-        }
-
         if (_binoculatMode)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1))

@@ -1,15 +1,38 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class RadioItem : MonoBehaviour, IInteractable
+public class Radio : MonoBehaviour, IInteractable
 {
-    public void Interact()
+    private readonly List<Interaction> interactions = new();
+
+    private void Awake()
     {
-        Debug.Log(gameObject.name + " - Interact");
+        interactions.Add(
+            new Interaction("talk", "Talk", Talk)
+        );
+
+        interactions.Add(
+            new Interaction("inspect", "Inspect", Inspect)
+        );
     }
 
-    public string GetDescription()
+    public IReadOnlyList<Interaction> GetInteractions()
     {
-        return "Turn on/off radio";
+        return interactions;
     }
 
+    private void Talk()
+    {
+        Debug.Log("Talk");
+    }
+
+    private void Inspect()
+    {
+        Debug.Log("Inspect");
+    }
+
+    public void Interact(InteractionType type)
+    {
+        throw new System.NotImplementedException();
+    }
 }
