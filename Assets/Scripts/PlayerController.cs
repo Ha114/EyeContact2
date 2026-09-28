@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,7 +19,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private InputActionReference moveAction;
     [SerializeField] private InputActionReference jumpAction;
-    [SerializeField] private InputActionReference interactAction;
 
     private CharacterController _characterController;
     private Vector2 _moveInput;
@@ -37,8 +37,6 @@ public class PlayerController : MonoBehaviour
     {
         moveAction.action.performed += StoreMovementInput;
         moveAction.action.canceled += StoreMovementInput;
-        interactAction.action.performed += InteracteInput;
-        interactAction.action.canceled += InteracteInput;
 
         //jumpAction.action.performed += Jump;
         //jumpAction.action.canceled += Jump;
@@ -48,8 +46,7 @@ public class PlayerController : MonoBehaviour
     {
         moveAction.action.performed -= StoreMovementInput;
         moveAction.action.canceled -= StoreMovementInput;
-        interactAction.action.performed -= InteracteInput;
-        interactAction.action.canceled -= InteracteInput;
+
         //jumpAction.action.performed -= Jump;
         //jumpAction.action.canceled -= Jump;
     }
@@ -72,12 +69,7 @@ public class PlayerController : MonoBehaviour
     //        _verticalVelocity = jumpForce;
     //    }
     //}
-
-    private void InteracteInput(InputAction.CallbackContext context)
-    {
-        Debug.Log("INTERACT: " + context.phase);
-    }
-
+    
     void HandleGravity()
     {
         if (_isGrounded && _verticalVelocity < 0)
@@ -100,5 +92,4 @@ public class PlayerController : MonoBehaviour
             _verticalVelocity = initialFallVelocity;
         }
     }
-
 }

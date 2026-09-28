@@ -30,7 +30,7 @@ public class MenuWhale : MonoBehaviour
         _animator = GetComponent<Animator>();
         _animator.speed = speed;
         this.transform.localScale = new Vector3(scale, scale, scale);
-        Debug.Log("SetUnique, speed: " + speed + ", scale = " + scale);
+        //Debug.Log("SetUnique, speed: " + speed + ", scale = " + scale);
 
     }
 
@@ -60,7 +60,7 @@ public class MenuWhale : MonoBehaviour
 
         int howMuchEyes = Random.Range(5, 13);
 
-        Debug.Log("DECAY Started, eyes to spawn: " + howMuchEyes + "!!!!");
+        //Debug.Log("DECAY Started, eyes to spawn: " + howMuchEyes + "!!!!");
 
 
         for (int i = 0; i < howMuchEyes; i++)
@@ -77,7 +77,7 @@ public class MenuWhale : MonoBehaviour
         _animator.SetBool("Die", true);
         this.gameObject.GetComponent<Rigidbody>().useGravity = true;
 
-        Debug.Log("DECAY FINISHED!!!!");
+        //Debug.Log("DECAY FINISHED!!!!");
     }
 
     //private void Die()

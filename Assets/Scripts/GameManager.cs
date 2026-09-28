@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+
+    void Start()
+    {
+        
+    }
+
+
     //[SerializeField]
     //List<AudioClip> normalWhaleSongs = new List<AudioClip>();
     //[SerializeField]
